@@ -89,6 +89,16 @@ function __vf_activate --description "Activate a virtualenv"
 	set -g _VF_EXTRA_PATH $VIRTUAL_ENV/bin
 	set -gx PATH $_VF_EXTRA_PATH $PATH
 
+	# Check if a project folder was set via mkproject, if so change to that dir
+	if test -f $VIRTUALFISH_HOME/$argv[1]/.project
+	    cat $VIRTUALFISH_HOME/$argv[1]/.project | read VF_PROJECT_FOLDER
+	    if test -d $VF_PROJECT_FOLDER
+		cd $VF_PROJECT_FOLDER
+	    else
+		echo "Project folder $VF_PROJECT_FOLDER does not exist."
+	    end
+	end
+	
 	# hide PYTHONHOME
 	if set -q PYTHONHOME
 		set -g _VF_OLD_PYTHONHOME $PYTHONHOME
